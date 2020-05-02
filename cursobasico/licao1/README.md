@@ -5,7 +5,7 @@
 
 [**Cleuton Sampaio**](https://github.com/cleuton)
 
-[**Assista ao vídeo desta lição ANTES de ler este conteúdo!**]()
+[**Assista ao vídeo desta lição ANTES de ler este conteúdo!**](https://youtu.be/73sGG2XLM3Y)
 
 Aprenda a criar aplicações Android utilizando o [**Android Studio**](https://developer.android.com/studio/) e a linguagem de programação [**Kotlin**](https://kotlinlang.org/).
 
