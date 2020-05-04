@@ -9,3 +9,4 @@ Aprenda a criar aplicações Android utilizando o [**Android Studio**](https://d
 O curso utilizará a linguagem **Kotlin**, mas é fundamental que você conheça Java, mesmo que não seja em ambiente Android. 
 
 1. [**Sua primeira aplicação Android**](./licao1)
+2. [**Contatos imediatos com Kotlin**](./licao2)
