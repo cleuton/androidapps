@@ -224,8 +224,176 @@ Boa pergunta! Em uma app real, isso viria através de um request na nuvem, como 
 
 Tem um **string** cmanado **large_text** que é usado na TextView declarada no arquivo "src/main/res/layout/content_scrolling.xml", que é inserido no activity_scrolling.xml. Dentro do content_scrolling.xml, o NestedScrollView aponta para: 
 ```
-tools:showIn="@layout/activity_scrolling">
+tools:showIn="@layout/activity_scrolling"
 ```
+
+Então, o conteúdo desta TextView é exibido em nossa activity e automaticamente faz scroll, sem que você tenha que adicionar código algum. 
+
+Esse conteúdo poderia ser uma lista de notícias ou artigos, e você poderia montá-lo dinamicamente (veremos isso em outra lição).
+
+## Adicionando outra activity
+
+Você deve estar se perguntando: Como eu posso adicionar mais uma interação com o usuário? Por exemplo, uma tela para que ele se identifique (faça login), caso ainda não o tenha feito. Isso protegerá o nosso conteúdo, deixando apenas que usuários registrados possam acessar. 
+
+Como eu disse antes, muitas aplicações preferem usar apenas uma activity e trabalhar com fragmentos, mas este é um conceito mais avançado e fora do escopo deste curso, que é básico. Aprenda o básico e depois eu ensino o resto. É assim que eu trabalho.
+
+Podemos criar nossa própria activity de **login** ou podemos usar um template pronto. Sempre é melhor começar com um template, pois dá menos trabalho. Bom, mude para a perspectiva **Android** na lista de projeto, selecione **app**. Clique com o botão direito e selecione: new / activity / login activity: 
+
+![](./f04-login.png)
+
+A nova activity não tem muita coisa para ver, mas, se você voltar ao projeto e ver a pasta "src/main/java/[pacote da app]", notará que foram criadas 2 novas pastas: 
+- data: contendo o modelo e as classes para acessar o repositório remoto de autenticação;
+- ui.login: contendo o código da activity de login.
+
+Essa activity usa o padrão [**MVC** - Model View Controller](https://pt.wikipedia.org/wiki/MVC). Alguns dizem que é **MVP** - Model View Presenter, ou **MVVC**, ou ainda **MVW**... realmente, isso não importa. O que importa é que existem classes de modelo e de visão separadas. 
+
+O objetivo dessa lição é mostrar como criar uma aplicação com mais de uma activity e fazer navegação entre elas. Só isso.
+
+O mecanismo de autenticação não importa agora. Vamos usar um usuário **falso** um **fake user**. Isso é feito no arquivo **LoginDataSource.kt**, dentro da pasta **data**, na classe **LoginDataSource**: 
+```
+    fun login(username: String, password: String): Result<LoggedInUser> {
+        try {
+            // TODO: handle loggedInUser authentication
+            val fakeUser = LoggedInUser(java.util.UUID.randomUUID().toString(), "Jane Doe")
+            return Result.Success(fakeUser)
+        } catch (e: Throwable) {
+            return Result.Error(IOException("Error logging in", e))
+        }
+    }
+```
+
+Neste método **login** é que você processaria as credenciais do usuário, utilizando o repositório (arquivo **LoginRepository**) para autenticá-lo. Mas aqui, só vamos retornar apenas o próprio username, sem verificar nada: 
+```
+val fakeUser = LoggedInUser(java.util.UUID.randomUUID().toString(), "${username}")
+```
+
+## Conectando as duas activities
+
+A activity principal (a Scrolling) é a única que tem a categoria **launcher**, portanto, ela é que será carregada em primeiro lugar. 
+
+Dentro de seu **onCreate** vamos testar se já existe um usuário logado e, caso não exista, vamos desviar para a activity de login. Simples assim.
+
+Em vez de complicar as coisas neste momento, tentando autenticar você com um provedor de nuvem, vamos apenas criar um **Singleton** que representará nosso usuário logado. Crie um novo arquivo Kotlin dentro do projeto (dentro do mesmo pacote), e coloque isso dentro dele: 
+```
+object UserSingleton {
+    var logado = false
+    var username = ""
+}
+```
+
+Ok, isso definitivamente carece de explicação! Em Kotlin, qualquer declaração iniciada por **object** denota um **Singleton**. O construtor é privado e o objeto é instanciado apenas quando um de seus membros for acessado a primeira vez. A primeira vez que a propriedade **logado** for invocada, retornará **false**. Note que ela foi declarada com **var**, portanto, pode ser modificada. 
+
+Bom, vamos abrir o código da activity principal e modificar o **onCreate**: 
+```
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_lista)
+        setSupportActionBar(toolbar)
+        fab.setOnClickListener { view ->
+            Snackbar.make(view, "Usuário logado ${UserSingleton.username}", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show()
+        }
+        // Acrescente este "if":
+        if (!UserSingleton.logado) {
+            val intent = Intent(this, LoginActivity::class.java) // importe a classe ALT+ENTER
+            startActivity(intent)
+        }
+    }
+```
+
+Acrescentei um "if" que testa se há um usuário logado, utilizando nosso **Singleton**. Se não houver, ele invocará a activity de login. Para invocar uma activity, criamos uma instância de **Intent** passando qual é a classe da activity que desejamos invocar. Neste caso, é a **LoginActivity** (veja no seu código qual é o nome da classe que você criou e provavelmente terá que importar!). Depois de criar a instância do **Intent** basta invocar o método herdado **startActivity** passando o **Intent** como parâmetro. 
+
+Agora, só precisamos fazer o caminho de volta! Quando o usuário se logar com sucesso, precisamos voltar a carregar a activity principal. Para isto, vamos abrir o código da LoginActivity, que fica dentro da pasta **ui.login**. 
+
+Calma! Você vai ver muita coisa ai e não precisa se preocupar nesse momento!
+
+Eu gosto muito do [**Zen do Python**](https://www.python.org/dev/peps/pep-0020/), especialmente esses: 
+- **"Explicit is better than implicit"** (explícito é melhor que implícito);
+- **"Simple is better than complex"** (simples é melhor que complexo);
+- **"Flat is better than nested"** (linear é melhor que aninhado);
+- **"There should be one-- and preferably only one --obvious way to do it"** (deve haver uma - e preferencialmente uma - maneira óbiva de fazer);
+- **"If the implementation is hard to explain, it's a bad idea"** (se a implementação for difícil de explicar, é uma má ideia);
+
+Infelizmente, o pessoal da comunidade Java gosta de complicar as coisas. Se podem fazer simples, complicam tudo. Em nome de quê? De reuso? Um desenvolvedor Java jamais cria um programa para resolver um problema: Ele cria um **framework** para resolver todos os problemas daquele tipo!
+
+E o pessoal do Kotlin é oriundo do Java, com esse pensamento ruim. Sempre complicam tudo.
+
+O código usa vários padrões e técnicas misturados, como: MV*, ViewModel, Factory Method, Observer etc. E eu me pergunto qual é o motivo? Nenhum argumento justifica isso. 
+
+Enfim, temos que conviver com isso. 
+
+Bom, o que precisamos mesmo? Ah, já sei: Se o usuário fizer login com sucesso, precisamos mudar o estado do nosso **Singleton** e carregar a activity principal. Se olharmos o código, veremos um lugar onde isto está sendo testado: 
+
+**loginViewModel.loginResult.observe**
+
+Podemos alterar o código para incluir o retorno à nossa activity principal: 
+```
+        loginViewModel.loginResult.observe(this@LoginActivity, Observer {
+            val loginResult = it ?: return@Observer
+
+            loading.visibility = View.GONE
+            if (loginResult.error != null) {
+                showLoginFailed(loginResult.error)
+            }
+            if (loginResult.success != null) {
+                updateUiWithUser(loginResult.success)
+            }
+            setResult(Activity.RESULT_OK)
+
+            //Complete and destroy login activity once successful
+            // Inserimos essas 4 linhas: 
+            val intent = Intent(this, ListaActivity::class.java)
+            UserSingleton.logado = true
+            UserSingleton.username = loginResult.success?.displayName ?: ""
+            startActivity(intent)
+            // Terminamos aqui
+            finish()
+        })
+```
+
+**Atenção**: O arquivo **UserSingleton** e o código-fonte da classe da Activity principal precisarão ser importados. Basta passar o mouse por cima do nome de cada um e usar **ALT+ENTER**. E tome cuidado para colocar o nome certo da classe da Activity no **Intent**! 
+
+Estamos obtendo o mome do usuário logado e colocando em nosso **Singleton**. Agora, essa instrução merece uma atenção especial: 
+
+UserSingleton.username = loginResult.**success?**.displayName **?: ""**
+
+Lembra que eu disse que Kotlin diferencia entre tipos nuláveis e não nuláveis? Pois é... A propriedade **success** pode ser null, portanto, o primeiro "?" evita o **NullPointer exception**! Caso ela seja null, então o resultado da expressão será null e não será lançada nenhuma exception.
+
+Bom, e o segundo "?", seguido de ":" é chamado de **Elvis Operator** (parece um Elvis com olhos e topete). Ele serve para testar se a expressão da direita for null, ele retorna a da esquerda. É como um valor default.
+
+A própria activity de login vai mostrar um **Toast** com **Welcome,...", mas vamos dar um toque especial, alterando a ação daquele botão na activity principal: 
+```
+        fab.setOnClickListener { view ->
+            Snackbar.make(view, "Usuário logado: ${UserSingleton.username}", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
+        }
+```
+
+Quando o usuário tocar no botão do envelope, ele mostrará quem está logado!
+
+## Testando!
+
+Bora testar? 
+
+Ao ser carregada, a activity determinou que não havia usuário logado, então incovou a activity de login: 
+
+![](./f05-formlogin.png)
+
+Então, após preencher tudo, a activity principal foi carregada e o **Toast** da Login Activity ainda estava visível: 
+
+![](./f06-toastwelcome.png)
+
+Ao tocarmos no ícone do envelope, nossa ação mostra quem está logado: 
+
+![](./f07-snackbar.png)
+
+
+## Conclusão
+
+Você criou uma app com duas activities, uma invocando a outra, em um ciclo de navegação. Aprendeu alguns conceitos novos e conseguiu evoluir bem no desenvolvimento de aplicações Android. 
+
+É claro que muita coisa deixou de ser explicada e que existem outras maneiras de fazer tudo isso, mas eu precisava te ensinar isso. 
+
 
 
 
