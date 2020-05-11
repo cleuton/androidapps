@@ -387,6 +387,29 @@ Ao tocarmos no ícone do envelope, nossa ação mostra quem está logado:
 
 ![](./f07-snackbar.png)
 
+## Relacionamento entre activities
+
+Quando temos mais de uma activity carregada, o Android as coloca em uma pilha (LIFO), portanto, para retornar a uma activity anterior basta encerrar a atual como **finish()**. 
+
+No código que eu mostrei, na **LoginActivity** o retorno para a activity principal é totalmente desnecessário: 
+```
+            //Complete and destroy login activity once successful
+            // Inserimos essas 4 linhas:
+            /*
+            val intent = Intent(this, ScrollingActivity::class.java)
+            UserSingleton.logado = true
+            UserSingleton.username = loginResult.success?.displayName ?: ""
+            startActivity(intent)
+            */
+            
+            // Terminamos aqui
+            finish()
+```
+
+Se comentarmos todo o código de criação e start do intent, o código ainda funcionará. O **finish()** retirará a **LoginActivity** da pilha e a activity anterior, a principal, aparecerá. 
+
+Eu fiz com o retorno para que você visse como podemos desviar para uma activity. Se o retorno fosse para uma terceira activity, então seria necessário.
+
 
 ## Conclusão
 
