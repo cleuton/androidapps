@@ -406,7 +406,7 @@ No código que eu mostrei, na **LoginActivity** o retorno para a activity princi
             finish()
 ```
 
-Se comentarmos todo o código de criação e start do intent, o código ainda funcionará. O **finish()** retirará a **LoginActivity** da pilha e a activity anterior, a principal, aparecerá. 
+Se comentarmos todo o código de criação e start do intent, como eu fiz no exemplo acima, o código ainda funcionará. O **finish()** retirará a **LoginActivity** da pilha e a activity anterior, a principal, aparecerá. Veja mais [**AQUI**](https://developer.android.com/guide/components/activities/tasks-and-back-stack).
 
 Eu fiz com o retorno para que você visse como podemos desviar para uma activity. Se o retorno fosse para uma terceira activity, então seria necessário.
 
