@@ -383,7 +383,7 @@ Tente fazer esse projeto! Você vai aprender muita coisa. Se **jogar a toalha** 
 
 Mas estude e tente fazer! Não é difícil!
 
-O zip do projeto completo está aqui, no repositório, na pasta desta lição. Você precisará criar um arquivo de recurso chamado **google_maps_api.xml** dentro de "src/main/res/values" com este conteúdo: 
+O zip do projeto completo está aqui, no repositório, na pasta desta lição. Você precisará editar o arquivo de recurso chamado **google_maps_api.xml** dentro de "src/main/res/values" com este conteúdo: 
 ```
 <resources>
     <!--
