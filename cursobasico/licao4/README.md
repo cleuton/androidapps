@@ -5,9 +5,7 @@
 
 [**Cleuton Sampaio**](https://github.com/cleuton)
 
-[**O VÍDEO AINDA NÃO ESTÁ PRONTO**]
-
-[**Assista ao vídeo desta lição ANTES de ler este conteúdo!**](****************************************)
+[**Assista ao vídeo desta lição ANTES de ler este conteúdo!**](https://youtu.be/88TAkWtaxas)
 
 Se você entrou aqui pela primeira vez, talvez seja melhor ver as [**lições do curso**](../README.md)
 

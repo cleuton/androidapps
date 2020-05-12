@@ -10,6 +10,6 @@ O curso utilizará a linguagem **Kotlin**, mas é fundamental que você conheça
 
 1. [**Sua primeira aplicação Android**](./licao1)
 2. [**Contatos imediatos com Kotlin**](./licao2) 
-3. [**Navegação entre activities**](./licao3) (em construção) ![](../images/construcao.png)
-4. [**Mapas e persistência**](./licao4) (em construção) ![](../images/construcao.png)
+3. [**Navegação entre activities**](./licao3) 
+4. [**Mapas e persistência**](./licao4) 
 
