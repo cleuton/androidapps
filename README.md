@@ -6,9 +6,9 @@
 
 Este é o seu **guru** de aplicações Android!
 
-Aprenda a criar [**Gráficos 3D** com **OpenGL**](./gl_kotlin/README.md): 
+Aprenda a criar [**Gráficos 3D** com **OpenGL**](./gl_kotlin/)! 
 
-[![](./images/f01-app.png)](./gl_kotlin/README.md)
+[![](./images/f01-app.png)](./gl_kotlin/)
 
 Toque na imagem
 
