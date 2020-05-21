@@ -6,6 +6,7 @@
 
 Este é o seu **guru** de aplicações Android!
 
+<<<<<<< HEAD
 Aprenda a criar [**Renderização 3D** com **OpenGL**](./gl_kotlin): 
 
 [![](./images/f01-app.png)](./gl_kotlin)
@@ -13,6 +14,11 @@ Aprenda a criar [**Renderização 3D** com **OpenGL**](./gl_kotlin):
 Aprenda a criar [**Textura e animação 3D** com **OpenGL**](./gl_texture): 
 
 [![](./images/f01-app-texture.png)](./gl_texture)
+=======
+Aprenda a criar [**Gráficos 3D** com **OpenGL**](./gl_kotlin/)! 
+
+[![](./images/f01-app.png)](./gl_kotlin/)
+>>>>>>> 01f1ab74ba63ac39f866a1763bd7207a6b523f0c
 
 Toque na imagem
 
